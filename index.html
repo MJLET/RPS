@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Rock Paper Scissors</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f0f0;
+    margin: 0;
+  }
+  .game-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 350px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 15px;
+  }
+  .choices {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  .choice {
+    width: 80px;
+    height: 80px;
+    border: 2px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+  }
+  .choice:hover {
+    background-color: #eee;
+  }
+  /* Rock */
+  .rock-shape {
+    width: 50px;
+    height: 50px;
+    background: gray;
+    border-radius: 50%;
+  }
+  /* Paper */
+  .paper-shape {
+    width: 50px;
+    height: 60px;
+    background: white;
+    border: 2px solid black;
+    box-sizing: border-box;
+  }
+  /* Scissors */
+  .scissors-shape {
+    position: relative;
+    width: 60px;
+    height: 60px;
+  }
+  .blade {
+    position: absolute;
+    width: 8px;
+    height: 40px;
+    background: black;
+    top: 10px;
+    left: 26px;
+    transform-origin: bottom center;
+  }
+  .blade.left {
+    transform: rotate(25deg);
+  }
+  .blade.right {
+    transform: rotate(-25deg);
+  }
+  .handle {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 3px solid black;
+    border-radius: 50%;
+    background: white;
+    bottom: 0;
+  }
+  .handle.left {
+    left: 10px;
+  }
+  .handle.right {
+    right: 10px;
+  }
+  #result {
+    margin-top: 10px;
+    font-weight: bold;
+    min-height: 24px;
+  }
+  .scoreboard {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="game-container">
+  <h1>Rock Paper Scissors</h1>
+  <div class="choices">
+    <div class="choice" data-choice="rock">
+      <div class="rock-shape"></div>
+    </div>
+    <div class="choice" data-choice="paper">
+      <div class="paper-shape"></div>
+    </div>
+    <div class="choice" data-choice="scissors">
+      <div class="scissors-shape">
+        <div class="blade left"></div>
+        <div class="blade right"></div>
+        <div class="handle left"></div>
+        <div class="handle right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="result">Make your move!</div>
+  <div class="scoreboard">
+    <div>Player: <span id="playerScore">0</span></div>
+    <div>Computer: <span id="computerScore">0</span></div>
+  </div>
+</div>
+
+<script>
+  const choices = document.querySelectorAll('.choice');
+  const resultDisplay = document.getElementById('result');
+  const playerScoreDisplay = document.getElementById('playerScore');
+  const computerScoreDisplay = document.getElementById('computerScore');
+
+  let playerScore = 0;
+  let computerScore = 0;
+
+  function getComputerChoice() {
+    const options = ['rock', 'paper', 'scissors'];
+    return options[Math.floor(Math.random() * options.length)];
+  }
+
+  function getWinner(player, computer) {
+    if (player === computer) return 'draw';
+    if (
+      (player === 'rock' && computer === 'scissors') ||
+      (player === 'paper' && computer === 'rock') ||
+      (player === 'scissors' && computer === 'paper')
+    ) return 'player';
+    return 'computer';
+  }
+
+  choices.forEach(choice => {
+    choice.addEventListener('click', () => {
+      const playerChoice = choice.dataset.choice;
+      const computerChoice = getComputerChoice();
+      const winner = getWinner(playerChoice, computerChoice);
+
+      if (winner === 'player') {
+        playerScore++;
+        resultDisplay.textContent = `You chose ${playerChoice}, Computer chose ${computerChoice}. You Win! 🎉`;
+      } else if (winner === 'computer') {
+        computerScore++;
+        resultDisplay.textContent = `You chose ${playerChoice}, Computer chose ${computerChoice}. You Lose! 😢`;
+      } else {
+        resultDisplay.textContent = `You both chose ${playerChoice}. It's a Draw! 😐`;
+      }
+
+      playerScoreDisplay.textContent = playerScore;
+      computerScoreDisplay.textContent = computerScore;
+    });
+  });
+</script>
+
+</body>
+</html>
